@@ -1,0 +1,26 @@
+{% load staticfiles %}
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="{% static  "css/wiki_style.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static  "css/wiki_style1.css" %}" />
+    <style type = "text/css">
+    .mw-editsection,.editsection,#toc,.metadata{
+      display:none;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="contents_pane" class="container">
+      {{text|safe}}
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+      $("a").click(function(){
+	window.location.href = 'http://wiki-it.appspot.com/search/' + encodeURIComponent($(this).attr('href'));
+	return false;
+      });
+    });
+    </script>
+  </body>
+</html>

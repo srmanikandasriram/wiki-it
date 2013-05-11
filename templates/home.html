@@ -1,0 +1,252 @@
+{% load dajaxice_templatetags %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html" />
+    <title>Wiki It &middot; Mani's Apps</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="hosted @Google App Engine">
+    <meta name="author" content="S.R.Manikandasriram">
+    <link rel="stylesheet" type="text/css" href="{% static "css/jquery-ui-1.10.1.custom.min.css" %}" />
+    <link href="http://twitter.github.io/bootstrap/assets/css/bootstrap.css" rel="stylesheet">
+    <link href="http://twitter.github.io/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <style type="text/css">
+
+      /* Sticky footer styles
+      -------------------------------------------------- */
+
+      html,
+      body {
+        height: 100%;
+        /* The html and body elements cannot have any padding or margin. */
+      }
+
+      /* Wrapper for page content to push down footer */
+      #wrap {
+        min-height: 100%;
+        height: auto !important;
+        height: 100%;
+        /* Negative indent footer by it's height */
+        margin: 0 auto -60px;
+      }
+
+      /* Set the fixed height of the footer here */
+      .push,
+      #footer {
+        height: 60px;
+      }
+      #footer {
+        background-color: #f5f5f5;
+      }
+
+      /* Lastly, apply responsive CSS fixes as necessary */
+      @media (max-width: 767px) {
+        #footer {
+          margin-left: -20px;
+          margin-right: -20px;
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+      }
+
+      /* Sign-in Form CSS
+      ------------------------------------------------- */
+      .form-signin {
+        max-width: 300px;
+        padding: 19px 29px 29px;
+        margin: 0 auto;
+        background-color: #fff;
+        border: 1px solid #e5e5e5;
+        -webkit-border-radius: 5px;
+           -moz-border-radius: 5px;
+                border-radius: 5px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+                box-shadow: 0 1px 2px rgba(0,0,0,.05);
+      }
+      .form-signin .form-signin-heading,
+      .form-signin .checkbox {
+        margin-bottom: 10px;
+      }
+      .form-signin input[type="text"],
+      .form-signin input[type="password"] {
+        font-size: 16px;
+        height: auto;
+        margin-bottom: 15px;
+        padding: 7px 9px;
+      }
+
+      /* Custom page CSS
+      -------------------------------------------------- */
+
+      #wrap > .container {
+        padding-top: 60px;
+      }
+      .container .credit {
+        margin: 20px 0;
+        text-align: center;
+      }
+      
+      code{
+        font-size: 80%;
+      }
+
+      #loginModal{
+	width:auto;
+        left:57.5%;
+      }
+      #outbox{
+	width:100%;
+      }
+    </style>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <!-- JavaScript Functions -->
+    <script type="text/javascript">
+    function autoResize(id){
+      var newheight;
+      
+      if(document.getElementById){
+	setTimeout(function(){
+	ifbody = document.getElementById(id).contentDocument;
+	try{
+	  newheight = ifbody.getElementById("contents_pane").clientHeight;
+	}catch(e){
+	  newheight = e;
+	}
+	document.getElementById(id).height= (newheight+50) + "px";
+	},1000);
+      }
+
+      $("#outbox").show();
+      $("#loading").hide();
+    }
+    </script>
+    <!-- End JavaScript Functions -->
+  </head>
+  <body>
+    <!-- Part 1: Wrap all page content here -->
+    <div id="wrap">
+    
+      <!-- Fixed navbar -->
+      <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+          <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="brand" href="{{site_url}}"><span class="strong">Wiki It</span></a>
+            <div class="nav-collapse collapse">
+              <ul class="nav">
+                <li class="active"><a href="{{site_url}}">Home</a></li>
+                <li><a href="{{site_url}}#about">About</a></li>
+              </ul>
+              <ul class="nav pull-right">
+		{% if user %}
+		<li class="dropdown">
+		  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+		    {{nickname}} 
+		    <b class="caret"></b>
+		  </a>
+		  <ul class="dropdown-menu">
+		    <li><a href="#">Account</a></li>
+		    <li><a href="{{logout_url}}">Log out</a></li>
+		  </ul>
+		</li>
+		{% else %}
+		<li>
+		  <a href="{{login_url}}" style="padding:0px;" ><img src="{% static "img/sign_in_with_google.png" %}" /></a>
+		</li>
+		{% endif %}
+              </ul>
+            </div><!--/.nav-collapse -->
+          </div>
+        </div>
+      </div>
+      
+      <!-- Begin page content -->
+      <div class="container">
+        <div class="page-header">
+	    <h1>Wiki It</h1>
+        </div>
+        {% block content %}
+        <p class="lead">Paste a Wiki URL and take back a complete ad free PDF with contents extracted from the URL.</p>
+
+	<div id="inbox">
+<!-- 	  <form id="search-form" class="form-search" action="" onsubmit="function(){alert('blah!');return False;}" method="POST"> -->
+<!-- 	    {% csrf_token %} -->
+	    <input name="search-q" id="search-q" type="search" class="input-block-level search-query" placeholder="What to Wiki today?" />
+<!-- 	  </form> -->
+	</div>
+	<hr>
+	<div id="loading" class="span12">
+	<center><img src="{% static "img/loading.gif" %}" /></center>
+	</div>
+	<iframe id="outbox" class="well" onload="autoResize(id);" scrolling="no">
+	</iframe>
+	<br/><br/><br/><br/>
+	{% endblock content %}
+      </div>
+      <!-- End page content -->
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Developed by <a href="https://www.facebook.com/manikandasriram" target="_blank">S.R.Manikandasriram</a></p>
+      </div>
+    </div>
+
+    <!-- Begin sign-in modal -->    
+    <div id="loginModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+      <form class="form-signin" action="" method="POST">
+	{% csrf_token %}
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	<h2>Please sign in</h2>
+        <input type="text" class="input-block-level" placeholder="Email address">
+        <input type="password" class="input-block-level" placeholder="Password">
+        <label class="checkbox">
+          <input type="checkbox" value="remember-me"> Remember me
+        </label>
+        <button class="btn btn-large btn-primary" type="submit">Sign in</button>
+      </form>
+    </div>
+    <!-- End sign-in modal -->
+  </body>
+  <!-- Required JS files -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+  <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="{% static "js/jquery.dajax.core.js" %}"></script>
+  {% dajaxice_js_import %}
+  <!-- End required JS files -->
+  {% block scripts %}
+  <!-- jQuery Functions -->
+  <script type="text/javascript">
+  $(document).ready(function(){
+    $("#search-q").change(function(){
+      //$("#outbox").attr('src',$(this).val());
+      //alert($(this).val());
+      $("#outbox").hide();
+      $("#loading").show();
+      var value = $(this).val();
+      value = value.replace(/ /g,'_');
+      if(value.substring(0,4) != "http"){
+        value = "http://en.wikipedia.org/wiki/" + value;
+      }
+      value = encodeURIComponent(value);
+      $("#outbox").attr('src','{{site_url}}search/' + value);
+      //Dajaxice.search.query(Dajax.process,{'url':$(this).val(),});
+      //$("#search-form").submit();
+    });
+  });
+  </script>
+  <!-- End jQuery Functions -->
+  {% endblock scripts %}
+  <!-- Hash Handler -->
+  <script type="text/javascript">
+  </script>
+  <!-- End Hash Handler -->
+</html>
