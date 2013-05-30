@@ -4,7 +4,11 @@
     <link rel="stylesheet" type="text/css" href="{% static  "css/wiki_style.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static  "css/wiki_style1.css" %}" />
     <style type = "text/css">
-    .mw-editsection,.editsection,#toc,.metadata{
+    html,body,.container{
+      background-color:white;
+      margin:10px;
+    }
+    .editsection,.mw-editsection,.metadata{
       display:none;
     }
     </style>
@@ -16,9 +20,30 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript">
     $(document).ready(function(){
-      $("a").click(function(){
-	window.location.href = '{{site_url}}search/' + encodeURIComponent($(this).attr('href'));
-	return false;
+//       $("a").click(function(){
+// 	window.location.href = '{{site_url}}search/' + encodeURIComponent($(this).attr('href'));
+//         window.parentDocument.getElementById("url").html = window.location.href;
+// 	return false;
+//       });
+      $("video").parents(".thumb").hide();
+      $("#contents_pane").ready(function(){
+      var data = window.location.href.split('?')[1].replace(/&amp;/g,'&');
+        var list = data.split('&');
+        for(var i=0; i<list.length; i++){
+	  if(list[i]==="img=on"){
+	    $(".thumb").hide();
+	  }else if(list[i]==="ct=on"){
+	    $(".reference").hide();
+	  }else if(list[i]==="toc=on"){
+	    $("#toc").hide();
+	  }else if(list[i]==="rl=on"){
+	    $(".rellink").hide();
+	  }else if(list[i]==="hl=on"){
+	    $("a").each(function(){
+	      $(this).replaceWith($(this).html());
+	    });
+	  }
+	}
       });
     });
     </script>

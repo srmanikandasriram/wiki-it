@@ -9,6 +9,10 @@ handlers:
   static_files: favicon.ico
   upload: favicon\.ico
 
+- url: /googlea14ae9cf3d54ab79.html
+  static_files: googlea14ae9cf3d54ab79.html
+  upload: googlea14ae9cf3d54ab79.html
+  
 - url: .*
   script: wiki_it.wsgi.application
 
