@@ -37,7 +37,7 @@ LANGUAGE_CODE = 'en-gb'
 
 SITE_ID = 1
 
-SITE_URL = "http://localhost:8080/"
+SITE_URL = "http://wiki-it.appspot.com/"
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True

@@ -5,13 +5,13 @@
     <head>
       <meta charset="utf-8">
       <meta http-equiv="Content-Type" content="text/html" />
-      <title>Wiki It &middot; Mani's Apps</title>
+      <title>Wiki It</title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="description" content="hosted @Google App Engine">
       <meta name="author" content="S.R.Manikandasriram">
       <link rel="stylesheet" type="text/css" href="{% static "css/jquery-ui-1.10.1.custom.min.css" %}" />
-      <link href="http://twitter.github.io/bootstrap/assets/css/bootstrap.css" rel="stylesheet">
-      <link href="http://twitter.github.io/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet">
+      <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+      <link href="{% static "css/bootstrap-responsive.min.css" %}" rel="stylesheet">
       <style type="text/css">
 
       /* Sticky footer styles
@@ -157,8 +157,9 @@
             <div class="nav-collapse collapse">
               <ul class="nav">
                 <li class="active"><a href="{{site_url}}">Home</a></li>
-                <li><a href="#addonModal" data-toggle="modal">What do you suggest?</a></li>
+                <li><a href="#addonModal" data-toggle="modal">Have a suggestion?</a></li>
               </ul>
+              <!--
               <ul class="nav pull-right">
 		{% if user %}
 		<li class="dropdown">
@@ -177,6 +178,7 @@
 		</li>
 		{% endif %}
               </ul>
+              -->
             </div><!--/.nav-collapse -->
           </div>
         </div>
@@ -194,7 +196,7 @@
 	  </div>
 	</div>
 	{% block content %}
-        <p class="lead">Paste a Wiki URL and take back a neat-looking PDF with contents extracted from the URL.</p>
+        <p class="lead">Enter the title of a Wiki article and take back a neat-looking PDF with contents extracted from the URL.</p>
 
 	<div id="inbox">
 	    <input name="search-q" id="search-q" type="search" class="input-block-level search-query" placeholder="What to Wiki today?" />
@@ -206,21 +208,32 @@
 	  <div id="tools">
 	    <h5>Please tick the desired modifications</h5>
 	    <form id="tools-form">
-	      <label class="checkbox inline">
-		<input type="checkbox" name="toc"> Remove Table of Contents
-	      </label>
-	      <label class="checkbox inline">
-		<input type="checkbox" name="img"> Remove images
-	      </label>
-	      <label class="checkbox inline">
-		<input type="checkbox" name="hl"> Remove hyperlinks
-	      </label>
-	      <label class="checkbox inline">
-		<input type="checkbox" name="ct"> Remove citations
-	      </label>
-	      <label class="checkbox inline">
-		<input type="checkbox" name="rl"> Remove links to related articles
-	      </label>
+<!-- 	      <span id="row1"> -->
+		<label class="checkbox inline">
+		  <input type="checkbox" name="toc"> Remove Table of Contents
+		</label>
+		<label class="checkbox inline">
+		  <input type="checkbox" name="img"> Remove images
+		</label>
+		<label class="checkbox inline">
+		  <input type="checkbox" name="hl"> Remove hyperlinks
+		</label>
+		<label class="checkbox inline">
+		  <input type="checkbox" name="ct"> Remove citations
+		</label>
+		<label class="checkbox inline">
+		  <input type="checkbox" name="rl"> Remove links to related articles
+		</label>
+                <label class="checkbox inline">
+                  <input type="checkbox" name="tb"> Remove Tables
+                </label>
+<!-- 	      </span> -->
+	      <br>
+	      <b>Choose the sections which you want to remove:</b><br>
+<!-- 	      <span id="sections"> -->
+<!-- 	      </span> -->
+<!-- 	      <select multiple id="sections" name="sections"> -->
+<!-- 	      </select> -->
 	      <button class="btn btn-primary pull-right" type="submit">Preview</button>
 	      <h6> Enter the following URL in any <a href="http://www.htmlpdf.com" target="_blank">HTML-to-PDF online converter</a></h6>
 	      <label id="url">
@@ -239,7 +252,7 @@
 
     <div id="footer">
       <div class="container">
-        <p class="muted credit">Developed by <a href="https://www.facebook.com/manikandasriram" target="_blank">S.R.Manikandasriram</a></p>
+        <p class="muted credit"><a href="#">This site is best viewed on Chrome, Firefox or Safari.</a><!--Developed by <a href="https://www.facebook.com/manikandasriram" target="_blank">S.R.Manikandasriram</a>--></p>
       </div>
     </div>
 
@@ -286,18 +299,24 @@
   {% block scripts %}
   <!-- jQuery Functions -->
   <script type="text/javascript">
+  function updateSectionList(name){
+    //$("#outbox").find(".sections").each(function(){
+    //  alert($(this).attr('id'));
+    //});
+    if(typeof na === 'undefined'){
+      na = name;
+      for(m=0; m<name.length; m++){
+	$("#tools-form>.btn").before("<label class=\"checkbox inline\"><input type=\"checkbox\" name=\"s"+m+"\">"+name[m]+"</label><br>");
+	//$("#tools-form #sections").append("<option value=\""+name[m].replace(/ /g,'_')+"\">"+name[m]+"</option>");
+      }
+    }
+  }
   $(document).ready(function(){
     $("#search-q").change(function(){
       $("#contents").hide();
       $("#loading").show();
       var value = $(this).val();
-      value = value.replace(/ /g,'_');
-      if(value.substring(0,4) != "http"){
-        value = "http://en.wikipedia.org/wiki/" + value;
-      }
-      var url = '{{site_url}}search/' + encodeURIComponent(value)+"?";
-      $("#outbox").attr('src',url);
-      $("#tools-form>#url").html(url);
+      Dajaxice.search.parse_query(Dajax.process,{'query':value,});
       $("#copy-url").show();
       $("#copy-url").zclip({
 	  path: "http://www.steamdev.com/zclip/js/ZeroClipboard.swf",

@@ -9,8 +9,8 @@ var Dajaxice = {
     
     search: {
     
-    query: function(callback_function, argv, custom_settings){
-        return Dajaxice.call('search.query', 'POST', callback_function, argv, custom_settings);
+    parse_query: function(callback_function, argv, custom_settings){
+        return Dajaxice.call('search.parse_query', 'POST', callback_function, argv, custom_settings);
     }
 
 
