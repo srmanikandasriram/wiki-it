@@ -11,7 +11,7 @@ dajaxice_autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'wiki_it.views.home', name='home'),
-    url(r'^login/', 'wiki_it.views.login', name='login'),
+    url(r'^addon/', 'wiki_it.views.addon', name='addon'),
     url(r'^search/(?P<url>.*)', 'search.views.search', name='search'),
 
     # Uncomment the admin/doc line below to enable admin documentation:

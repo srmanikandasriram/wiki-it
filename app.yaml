@@ -5,13 +5,23 @@ api_version: 1
 threadsafe: yes
 
 handlers:
+- url: /robots.txt
+  static_files: robots.txt
+  upload: robots\.txt
+
 - url: /favicon\.ico
   static_files: favicon.ico
   upload: favicon\.ico
 
+- url: /googlea14ae9cf3d54ab79.html
+  static_files: googlea14ae9cf3d54ab79.html
+  upload: googlea14ae9cf3d54ab79.html
+  
 - url: .*
   script: wiki_it.wsgi.application
 
 libraries:
 - name: django
   version: "1.4"
+- name: webob
+  version: "1.1.1"

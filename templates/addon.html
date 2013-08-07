@@ -1,12 +1,12 @@
 {% extends "home.html" %}
+{% load staticfiles %}
 {% block content %}
-  <p class="lead">Paste a Wiki URL and take back a complete ad free PDF with contents extracted from the URL.</p>
-  <div id="loading">
-    <img src="{% static "img/loading.gif" %}" />
-  </div>
-  <br/>
-  <div id="outbox">
-    {{response|safe}}
+  <p class="lead">Want a new feature?</p>
+  <div id="addon">
+    <form action="{{site_url}}addon" method="POST">
+      {{ addon_form.as_p }}
+      <button type="submit" class="btn btn-primary">Request</button>
+    </form>
   </div>
 {% endblock %}
 {% block scripts %}

@@ -2,3 +2,4 @@
 *.py~
 local_settings.py
 static/*
+.html~
