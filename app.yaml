@@ -18,10 +18,10 @@ handlers:
   upload: googlea14ae9cf3d54ab79.html
   
 - url: .*
-  script: wiki_it.wsgi.application
+  script: export2pdf.wsgi.application
 
 libraries:
 - name: django
   version: "1.4"
-- name: webob
-  version: "1.1.1"
+#- name: webob
+#  version: "1.1.1"

@@ -25,3 +25,9 @@ def addon(request):
         addon_form = AddonForm()
     return render_to_response('addon.html', locals(), context_instance=RequestContext(request))  
 
+def upload(request):
+    if request.method == "POST":
+        html = request.POST.get('html','Nothing received!')
+        return HttpResponse(html)
+    else:
+        return HttpResponse("It must be a POST request!")

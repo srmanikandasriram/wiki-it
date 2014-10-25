@@ -13,7 +13,7 @@ urlpatterns = patterns('',
     url(r'^$', 'wiki_it.views.home', name='home'),
     url(r'^addon/', 'wiki_it.views.addon', name='addon'),
     url(r'^search/(?P<url>.*)', 'search.views.search', name='search'),
-
+    url(r'^upload/','wiki_it.views.upload', name='upload'),
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
@@ -22,4 +22,8 @@ urlpatterns = patterns('',
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
 )
 
-urlpatterns += staticfiles_urlpatterns()
+urlpatterns += patterns('django.views.static', (r'^static/(?P<path>.*)$'
+                        , 'serve',
+                        {'document_root': settings.STATIC_ROOT,
+                        'show_indexes': True}))
+
